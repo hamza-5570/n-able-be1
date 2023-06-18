@@ -1,0 +1,11 @@
+var express = require("express");
+const productrouter = require("./productRoutes");
+const contactrouter = require("./contactRouter");
+const paymentrouter = require("./paymentRouter");
+const userrouter = require("./userRoutes");
+var router = express.Router();
+router.use("/product", productrouter);
+router.use("/contact", contactrouter);
+router.use("/payment", paymentrouter);
+router.use("/user", userrouter);
+module.exports = router;
