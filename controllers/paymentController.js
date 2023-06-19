@@ -134,7 +134,7 @@ class Payment {
   GetPaymentById = async (req, res) => {
     const { id } = req.params;
     try {
-      let payment = await paymentService.getOne({ _id: id });
+      let payment = await paymentService.getOne({ user_id: id });
       if (!payment) {
         return notFoundResponse(res, messageUtil.NotFound);
       } else {
