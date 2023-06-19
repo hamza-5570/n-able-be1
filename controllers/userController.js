@@ -89,6 +89,45 @@ class Users {
     }
   };
 
+  UserLogin = async (req, res) => {
+    const { email, password } = req.body;
+    let errors = [];
+    if (!email) {
+      errors.push("Email");
+    }
+
+    if (!password) {
+      errors.push("Password");
+    }
+
+    if (errors.length > 0) {
+      errors = errors.join(", ");
+      return res.send({
+        message: `Please insert: ${errors}`,
+        status: "400",
+      });
+    }
+    let user;
+    try {
+      user = await UserServices.getUser({ email });
+      if (!user) {
+        return notFoundResponse(res, messageUtil.NotFound);
+      } 
+      if(user.role != "admin") {
+        return authorizationErrorResponse(res, messageUtil.unAuthorized)
+      }
+        const isMatch = await comparePassword(password, user.password);
+        if (!isMatch) {
+          return authorizationErrorResponse(res, messageUtil.incorrectPassword);
+        }
+        const token = jwtHelper.issue({ id: user._id });
+        return successResponse(res, messageUtil.ok, user, token);
+    } catch (err) {
+      return serverErrorResponse(res, err);
+    }
+  };
+
+
   UserAuth = async (req, res) => {
     try {
       let user = await UserServices.getUser({ _id: req.userId });

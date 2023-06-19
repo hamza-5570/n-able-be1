@@ -5,6 +5,7 @@ const { checkToken } = require("../utilities/authToken");
 var router = express.Router();
 
 router.post("/login", user.UserLogin);
+router.post("/adminLogin", user.UserLogin);
 router.post("/signUp", user.UserSignUp);
 router.get("/allUsers", user.GetAllUsers);
 router.get("/auth", checkToken, user.UserAuth);
